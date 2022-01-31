@@ -1,16 +1,10 @@
-extends KinematicBody2D
-
-const ACCELERATION = 512
-const MAX_SPEED = 64
-const AIR_RESISTANCE = 0.02
-const FRICTION = 0.25
-const GRAVITY = 200
-const JUMP_FORCE = 128
-
-var motion = Vector2.ZERO
+extends "res://src/Actors/Actor.gd"
 
 onready var sprite = $Sprite
 onready var animation = $AnimationPlayer
+
+var current_life = 3
+var max_life = 3
 
 func _physics_process(delta):
 	var x_input = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -44,3 +38,9 @@ func _physics_process(delta):
 	# move_and_slide retorna a motion restante
 	# zera em caso de colisão (ou seja, após colidir, motion = 0
 	motion = move_and_slide(motion, Vector2.UP)
+
+
+func _on_WorldEnd_body_entered(body:PhysicsBody2D):
+	position = body.position + Vector2(-50,-300)
+	body.position = position
+	# get_tree().change_scene("res://src/Scenes/World.tscn")
